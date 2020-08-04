@@ -153,7 +153,7 @@ class Sendsignal(TemplateView):
         ins.message = data['message']
         ins.op = data['op']
         ins.shifted = data['shifted']
-        ins.session_id = request.session['user_id']
+        ins.session_id = data['message']
         ins.save()
         return HttpResponse('')
 
