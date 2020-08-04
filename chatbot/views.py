@@ -53,8 +53,9 @@ def message(request):
     return_json_str = json.loads(answer)
     return_str = return_json_str['userRequest']['utterance']
     return_id = return_json_str['userRequest']['user']['properties']['plusfriendUserKey']
-    
-    if ChatbotUser.objects.get(user_id=return_id) == None:
+    try:
+        ChatbotUser.objects.get(user_id=return_id)
+    except ChatbotUser.DoesNotExist:
         cu = ChatbotUser(user_id=return_id)
         cu.save()
         return JsonResponse({
