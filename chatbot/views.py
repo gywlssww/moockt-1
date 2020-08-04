@@ -50,7 +50,7 @@ def message(request):
     answer = ((request.body).decode('utf-8'))
     return_json_str = json.loads(answer)
     return_str = return_json_str['userRequest']['utterance']
-    return_id = retusn_json_str['userRequest']['user']['properties']['plusfriendUserKey']
+    return_id = return_json_str['userRequest']['user']['properties']['plusfriendUserKey']
 
     print(return_id)
 
