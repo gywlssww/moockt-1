@@ -3,6 +3,9 @@ from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.utils.safestring import mark_safe
 from django.conf import settings
+
+from chatbot.models import ChatbotUser
+
 import threading
 import datetime
 import json
@@ -33,6 +36,14 @@ chatbot_info = {}
 #view of index page (main menu)
 @csrf_exempt
 def index(request):
+    print(request.POST['id'])
+    
+    try:
+        ChatbotUser.objects.get(user_id=request.POST['id'])
+    except ChatbotUser.DoesNotExist:
+        return render(request, 'moocacha/login.html')
+    
+    request.session['user_id'] = request.POST['id']
     return render(request, 'moocacha/index.html')
 
 
@@ -67,6 +78,7 @@ def main(request):
     #     else:
     #         pass{
     #data['main_url'] =  "../media/video/Computing-thinking.mp4"
+
     return render(request, 'moocacha/main.html', data)
 
 from django.views.generic import TemplateView
@@ -80,7 +92,9 @@ class Alarm(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super(TemplateView, self).get_context_data()
-        context['username'] = self.request.user.username
+        
+        #context['username'] = self.request.user.username
+        context['username'] = self.request.session['user_id']
         return context
 
 class Reservation(TemplateView):
@@ -113,8 +127,19 @@ class Sendsignal(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super(TemplateView, self).get_context_data()
-        context['username'] = self.request.user.username
-        lastrecord = Test.objects.last()
+        #context['username'] = self.request.user.username
+        
+        try:
+            lastrecord = Test.objects.filter(session_id=self.request.session['user_id']).last()
+            
+        except Test.DoesNotExist:
+            content['username'] = ""
+            content['shifted'] = ""
+            content['op'] = ""
+            return context
+        
+        lastrecord.delete()
+        context['username'] = lastrecord.session_id
         context['shifted'] = lastrecord.shifted
         context['op'] = lastrecord.op
         return context
@@ -128,6 +153,7 @@ class Sendsignal(TemplateView):
         ins.message = data['message']
         ins.op = data['op']
         ins.shifted = data['shifted']
+        ins.session_id = request.session['user_id']
         ins.save()
         return HttpResponse('')
 
@@ -136,3 +162,11 @@ def foo(request):
     response = requests.post('http://localhost:8000/signal', data=json.dumps(post_data))
     # content = response.content
     return HttpResponse(response)
+
+def login(request):
+    data = dict()
+    return render(request,"moocacha/login.html",data)
+
+def logout(request):
+    del request.session['user_id']
+    return redirect('/login')

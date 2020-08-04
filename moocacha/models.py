@@ -7,4 +7,5 @@ class Test(models.Model):
     message = models.CharField(max_length=100)
     shifted = models.CharField(max_length=254)
     op = models.CharField(max_length=100)
+    session_id = models.CharField(max_length=254)
  

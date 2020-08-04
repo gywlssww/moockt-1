@@ -20,6 +20,7 @@ from django.conf import settings
 from django.conf.urls.static import static
 
 urlpatterns = [
+    path('login',views.login),
     path('', views.index),
     path('main', views.main),
     path('test',views.Reservation.as_view()),
@@ -27,6 +28,7 @@ urlpatterns = [
     path('signal',views.Sendsignal.as_view()),
     path('foo',views.foo),
     path('signaltest',views.signaltest),
+    path('logout',views.logout),
 ]
 
 #urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -6,7 +6,9 @@ from django.utils.safestring import mark_safe
 from django.conf import settings
 from django.urls import reverse
 
-from  moocacha import views
+from moocacha import views
+
+from chatbot.models import ChatbotUser
 
 import requests
 import json
@@ -51,6 +53,20 @@ def message(request):
     return_json_str = json.loads(answer)
     return_str = return_json_str['userRequest']['utterance']
     return_id = return_json_str['userRequest']['user']['properties']['plusfriendUserKey']
+    
+    if ChatbotUser.objects.get(user_id=return_id) == None:
+        cu = ChatbotUser(user_id=return_id)
+        cu.save()
+        return JsonResponse({
+                    'version': "2.0",
+                    'template': {
+                        'outputs': [{
+                            'simpleText': {
+                                'text': "발급받은 ID : {}".format(return_id)
+                            }
+                        }],
+                    }
+                })
 
     print(return_id)
 
@@ -69,7 +85,7 @@ def message(request):
         })
     else:
         if sft_time.isdigit():
-            post_data = {'message': 'root','shifted': sft_time ,'op': ''}
+            post_data = {'message': return_id,'shifted': sft_time ,'op': ''}
             response = requests.post('http://localhost:8000/signal', data=json.dumps(post_data))
             return JsonResponse({
                 'version': "2.0",
@@ -83,7 +99,7 @@ def message(request):
             })
         else:
             if sft_time[-1] == '+' and sft_time[:-1].isdigit():
-                post_data = {'message': 'root','shifted': sft_time[:-1],'op': 'plus'}
+                post_data = {'message': return_id,'shifted': sft_time[:-1],'op': 'plus'}
                 response = requests.post('http://localhost:8000/signal', data=json.dumps(post_data))
                 return JsonResponse({
                     'version': "2.0",
@@ -96,7 +112,7 @@ def message(request):
                     }
                 })
             elif sft_time[-1] == '-' and sft_time[:-1].isdigit():
-                post_data = {'message': 'root','shifted': sft_time[:-1],'op': 'minus' }
+                post_data = {'message': return_id,'shifted': sft_time[:-1],'op': 'minus' }
                 response = requests.post('http://localhost:8000/signal', data=json.dumps(post_data))
                 return JsonResponse({
                     'version': "2.0",
