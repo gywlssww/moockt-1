@@ -168,5 +168,7 @@ def login(request):
     return render(request,"moocacha/login.html",data)
 
 def logout(request):
-    del request.session['user_id']
+    #del request.session['user_id']
+    request.session['user_id'] = {}
+    request.session.modified=True
     return redirect('/login')
