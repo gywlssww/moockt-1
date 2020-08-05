@@ -68,8 +68,17 @@ def message(request):
                         }],
                     }
                 })
-
-    print(return_id)
+    if sft_time = "!session":
+        return JsonResponse({
+                'version': "2.0",
+                'template': {
+                    'outputs': [{
+                        'simpleText': {
+                            'text': "발급받은 ID : {}".format(return_id)
+                        }
+                    }],
+                }
+            })
 
     sft_time = chkTime(return_str)
 
