@@ -68,7 +68,7 @@ def message(request):
                         }],
                     }
                 })
-    if sft_time == "!session":
+    if return_str == "!session":
         return JsonResponse({
                 'version': "2.0",
                 'template': {
