@@ -58,8 +58,8 @@ def message(request):
     return_id = return_json_str['userRequest']['user']['properties']['plusfriendUserKey']
     
     
-    data = json.dumps(return_str) + "\n"
-    print("recv data:"+data)
+    requestMsg = json.dumps(return_str) + "\n"
+    print("recv data:"+requestMsg)
     try:
         with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
             s.connect((address, PORT))
