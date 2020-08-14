@@ -36,7 +36,7 @@ chatbot_info = {}
 #view of index page (main menu)
 @csrf_exempt
 def index(request):
-    print(request.POST['id'])
+    #print(request.POST['id'])
     
     try:
         ChatbotUser.objects.get(user_id=request.POST['id'])
@@ -46,6 +46,16 @@ def index(request):
     request.session['user_id'] = request.POST['id']
     return render(request, 'moocacha/index.html')
 
+def signupIndex(request):
+    try:
+        quser = ChatbotUser.objects.get(user_id=request.POST['id'])
+    except ChatbotUser.DoesNotExist:
+        return render(request, 'moocacha/signup.html')
+
+    quser.user_id = request.POST['new_id']
+    quser.save()
+    request.session['user_id'] = request.POST['new_id']
+    return render(request,'moocacha/index.html')
 
 #view of main page (video and chatbot)
 @csrf_exempt
@@ -166,6 +176,10 @@ def foo(request):
 def login(request):
     data = dict()
     return render(request,"moocacha/login.html",data)
+
+def signup(request):
+    data = dict()
+    return render(request,"moocacha/signup.html",data)
 
 def logout(request):
     #del request.session['user_id']

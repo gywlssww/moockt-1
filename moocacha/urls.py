@@ -21,6 +21,8 @@ from django.conf.urls.static import static
 
 urlpatterns = [
     path('login',views.login),
+    path('signup',views.signup),
+    path('signupauth',views.signupIndex),
     path('', views.index),
     path('main', views.main),
     path('test',views.Reservation.as_view()),
