@@ -14,6 +14,8 @@ import requests
 import json
 import os.path
 
+address = "114.70.21.89"
+PORT = 9005
 PROJECT_ROOT = os.path.abspath(os.path.dirname(__file__))
 
 def keyboard(request):
@@ -53,6 +55,24 @@ def message(request):
     return_json_str = json.loads(answer)
     return_str = return_json_str['userRequest']['utterance']
     return_id = return_json_str['userRequest']['user']['properties']['plusfriendUserKey']
+    
+    
+    data = json.dumps(return_str) + "\n"
+    print("recv data:"+data)
+    try:
+        with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+            s.connect((address, PORT))
+            s.sendall(requestMsg.encode("utf-8"))
+            received = str(s.recv(1024), "utf-8")
+    except socket.error as e:
+        print("챗봇이 존재하지 않거나 꺼져있다")
+        received = -1
+
+    if received == -1:
+        # TODO 
+        print("error")
+
+
     try:
         ChatbotUser.objects.get(user_id=return_id)
     except ChatbotUser.DoesNotExist:

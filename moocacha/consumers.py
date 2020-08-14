@@ -19,7 +19,7 @@ import socket
 script_file_path = os.path.join(settings.MEDIA_ROOT, 'script/')
 
 #Broker HOST, PORT
-HOST = "114.70.21.90"
+HOST = "114.70.21.89"
 #HOST = "114.70.21.89"
 PORT = 9009
 
