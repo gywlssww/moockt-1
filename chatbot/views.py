@@ -72,7 +72,8 @@ def message(request):
     if received == -1:
         # TODO 
         print("error")
-
+    else:
+        print("recv:"+received)
 
     try:
         ChatbotUser.objects.get(user_id=return_id)
