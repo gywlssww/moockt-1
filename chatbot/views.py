@@ -10,6 +10,7 @@ from moocacha import views
 
 from chatbot.models import ChatbotUser
 
+import socket
 import requests
 import json
 import os.path
