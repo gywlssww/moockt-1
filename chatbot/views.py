@@ -27,7 +27,7 @@ def keyboard(request):
 def chkTime(mystr):
     if len(mystr)==0:
         return "e"
-    sft_time=""
+    sft_time = mystr
     mystr = mystr.strip()
     lastchar = mystr[-1]
     if lastchar == '분':
@@ -57,30 +57,26 @@ def message(request):
     return_str = return_json_str['userRequest']['utterance']
     return_id = return_json_str['userRequest']['user']['properties']['plusfriendUserKey']
     
-    
-    requestMsg = json.dumps(return_str) + "\n"
-    print("recv data:"+requestMsg)
-    try:
-        with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
-            s.connect((address, PORT))
-            s.sendall(requestMsg.encode("utf-8"))
-            received = str(s.recv(1024), "utf-8")
-    except socket.error as e:
-        print("챗봇이 존재하지 않거나 꺼져있다")
-        received = -1
+    #cmd msg
+    if len(return_str)!=0 and return_str[0] == '!':
 
-    if received == -1:
-        # TODO 
-        print("error")
-    else:
-        print("recv:"+received)
-
-    try:
-        ChatbotUser.objects.get(user_id=return_id)
-    except ChatbotUser.DoesNotExist:
-        cu = ChatbotUser(user_id=return_id)
-        cu.save()
-        return JsonResponse({
+        try:
+            ChatbotUser.objects.get(user_id=return_id)
+        except ChatbotUser.DoesNotExist:
+            cu = ChatbotUser(user_id=return_id)
+            cu.save()
+            return JsonResponse({
+                        'version': "2.0",
+                        'template': {
+                            'outputs': [{
+                                'simpleText': {
+                                    'text': "발급받은 ID : {}".format(return_id)
+                                }
+                            }],
+                        }
+                    })
+        if return_str == "!session":
+            return JsonResponse({
                     'version': "2.0",
                     'template': {
                         'outputs': [{
@@ -90,125 +86,157 @@ def message(request):
                         }],
                     }
                 })
-    if return_str == "!session":
-        return JsonResponse({
-                'version': "2.0",
-                'template': {
-                    'outputs': [{
-                        'simpleText': {
-                            'text': "발급받은 ID : {}".format(return_id)
-                        }
-                    }],
-                }
-            })
 
-    sft_time = chkTime(return_str)
+        sft_time = chkTime(return_str[1:])
 
-    if len(sft_time)==0:
-        return JsonResponse({
-            'version': "2.0",
-            'template': {
-                'outputs': [{
-                    'simpleText': {
-                        'text': "잘못된 입력"
-                    }
-                }],
-            }           
-        })
-    else:
-        if sft_time.isdigit():
-            post_data = {'message': return_id,'shifted': sft_time ,'op': ''}
-            response = requests.post('http://localhost:8000/signal', data=json.dumps(post_data))
+        if len(sft_time)==0:
             return JsonResponse({
                 'version': "2.0",
                 'template': {
                     'outputs': [{
                         'simpleText': {
-                            'text': "{}초로 이동".format(sft_time)
+                            'text': "잘못된 입력"
                         }
                     }],
-                }
+                }           
             })
         else:
-            if sft_time[-1] == '+' and sft_time[:-1].isdigit():
-                post_data = {'message': return_id,'shifted': sft_time[:-1],'op': 'plus'}
+            if sft_time=="재생":
+                post_data = {"message":return_id,'shifted':0,'op':'play'}
                 response = requests.post('http://localhost:8000/signal', data=json.dumps(post_data))
                 return JsonResponse({
                     'version': "2.0",
                     'template': {
                         'outputs': [{
                             'simpleText': {
-                                'text': "{}초 후로 이동".format(sft_time[:-1])
+                                'text': "동영상 재생"
                             }
                         }],
                     }
                 })
-            elif sft_time[-1] == '-' and sft_time[:-1].isdigit():
-                post_data = {'message': return_id,'shifted': sft_time[:-1],'op': 'minus' }
+            
+            elif sft_time=="정지":
+                post_data = {"message":return_id,'shifted':0,'op':'stop'}
                 response = requests.post('http://localhost:8000/signal', data=json.dumps(post_data))
                 return JsonResponse({
                     'version': "2.0",
                     'template': {
                         'outputs': [{
                             'simpleText': {
-                                'text': "{}초 전으로 이동".format(sft_time[:-1])
+                                'text': "동영상 일시정지"
+                            }
+                        }],
+                    }
+                })
+            elif sft_time=="다음":
+                post_data = {"message":return_id,'shifted':0,'op':'next'}
+                response = requests.post('http://localhost:8000/signal', data=json.dumps(post_data))
+                return JsonResponse({
+                    'version': "2.0",
+                    'template': {
+                        'outputs': [{
+                            'simpleText': {
+                                'text': "다음 동영상"
+                            }
+                        }],
+                    }
+                })
+            elif sft_time=="음소거":
+                post_data = {"message":return_id,'shifted':0,'op':'mute'}
+                response = requests.post('http://localhost:8000/signal', data=json.dumps(post_data))
+                return JsonResponse({
+                    'version': "2.0",
+                    'template': {
+                        'outputs': [{
+                            'simpleText': {
+                                'text': "동영상 음소거"
+                            }
+                        }],
+                    }
+                })    
+            if sft_time.isdigit():
+                post_data = {'message': return_id,'shifted': sft_time ,'op': ''}
+                response = requests.post('http://localhost:8000/signal', data=json.dumps(post_data))
+                return JsonResponse({
+                    'version': "2.0",
+                    'template': {
+                        'outputs': [{
+                            'simpleText': {
+                                'text': "{}초로 이동".format(sft_time)
                             }
                         }],
                     }
                 })
             else:
-                return JsonResponse({
-                    'version': "2.0",
-                    'template': {
-                        'outputs': [{
-                            'simpleText': {
-                                'text': "잘못된 입력"
-                            }
-                        }],
-                    }
-                })
+                if sft_time[-1] == '+' and sft_time[:-1].isdigit():
+                    post_data = {'message': return_id,'shifted': sft_time[:-1],'op': 'plus'}
+                    response = requests.post('http://localhost:8000/signal', data=json.dumps(post_data))
+                    return JsonResponse({
+                        'version': "2.0",
+                        'template': {
+                            'outputs': [{
+                                'simpleText': {
+                                    'text': "{}초 후로 이동".format(sft_time[:-1])
+                                }
+                            }],
+                        }
+                    })
+                elif sft_time[-1] == '-' and sft_time[:-1].isdigit():
+                    post_data = {'message': return_id,'shifted': sft_time[:-1],'op': 'minus' }
+                    response = requests.post('http://localhost:8000/signal', data=json.dumps(post_data))
+                    return JsonResponse({
+                        'version': "2.0",
+                        'template': {
+                            'outputs': [{
+                                'simpleText': {
+                                    'text': "{}초 전으로 이동".format(sft_time[:-1])
+                                }
+                            }],
+                        }
+                    })
+                else:
+                    return JsonResponse({
+                        'version': "2.0",
+                        'template': {
+                            'outputs': [{
+                                'simpleText': {
+                                    'text': "잘못된 입력"
+                                }
+                            }],
+                        }
+                    })
 
+    requestMsg = json.dumps(return_str) + "\n"
+    #print("recv data:"+requestMsg)
+    try:
+        with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+            s.connect((address, PORT))
+            s.sendall(requestMsg.encode("utf-8"))
+            received = str(s.recv(1024), "utf-8")
 
-    if return_str == '5':
-        data['shifted-time'] = 300
-        print(data)
-        #return render(request, 'moocacha/main.html', data)
-        #return HttpResponseRedirect(reverse('shiftedpage'))
-
-        post_data = {'message': 'root','shifted-time': '300'}
-        response = requests.post('http://localhost:8000/signal', data=json.dumps(post_data))
-
+    except socket.error as e:
         return JsonResponse({
             'version': "2.0",
             'template': {
                 'outputs': [{
                     'simpleText': {
-                        'text': "테스트 성공"
+                        'text': "잘못된 입력 또는 챗봇이 꺼져있음"
                     }
                 }],
-                'quictReplies': [{
-                    'label': '처음으로',
-                    'action': 'message',
-                    'messageText': '처음으로'
-                }]
             }
         })
-    if return_str == '테스트':
-        return JsonResponse({
-            'version': "2.0",
-            'template': {
-                'outputs': [{
-                    'simpleText': {
-                        'text': "테스트 성공"
-                    }
-                }],
-                'quictReplies': [{
-                    'label': '처음으로',
-                    'action': 'message',
-                    'messageText': '처음으로'
-                }]
-            }
-        })
+
+    
+    return JsonResponse({
+        'version': "2.0",
+        'template': {
+            'outputs': [{
+                'simpleText': {
+                    'text': received
+                }
+            }],
+        }
+    })
     
 def shiftedpage(request):
     data = dict()

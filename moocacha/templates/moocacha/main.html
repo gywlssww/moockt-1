@@ -217,6 +217,19 @@
 					                    
                     main_video.currentTime = Math.max(0,(Number(main_video.currentTime)-Number(shifted)));
 				}
+                
+                else if(op=='stop'){
+                    player.stopVideo()
+                }
+                else if(op=='play'){
+                    player.playVideo()
+                }
+                else if(op=='next'){
+                    player.nextVideo()
+                }
+                else if(op=='mute'){
+                    player.mute()
+                }
                 else{
 					player.seekTo(Number(shifted))
 						                    
