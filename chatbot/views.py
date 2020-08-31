@@ -225,6 +225,7 @@ def message(request):
                 }],
             }
         })
+    print("R: "received)
     if received == "해당되는 내용이 없습니다.":
         return JsonResponse({
             'version': "2.0",
