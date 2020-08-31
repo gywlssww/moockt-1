@@ -231,8 +231,8 @@ def message(request):
             'template': {
                 'outputs': [{
                     'quickReplies': {
-                        'label':"적절한 응답을 찾지 못했습니다. 게시판에 등록하시겠습니까?"
-                        'action':'message'
+                        'label':"적절한 응답을 찾지 못했습니다. 게시판에 등록하시겠습니까?",
+                        'action':'message',
                         'messageText':"교수님께 직접 질문"
                     }
                 }],
