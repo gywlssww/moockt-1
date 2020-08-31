@@ -225,7 +225,19 @@ def message(request):
                 }],
             }
         })
-
+    if received == "해당되는 내용이 없습니다.":
+        return JsonResponse({
+            'version': "2.0",
+            'template': {
+                'outputs': [{
+                    'quickReplies': {
+                        'label':"적절한 응답을 찾지 못했습니다. 게시판에 등록하시겠습니까?"
+                        'action':'message'
+                        'messageText':"교수님께 직접 질문"
+                    }
+                }],
+            }
+        })
     
     return JsonResponse({
         'version': "2.0",

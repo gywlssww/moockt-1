@@ -183,14 +183,12 @@
                 
                 document.getElementById("chatLog").value += ("Me : " + message + "\n");
                 chatSocket.send(JSON.stringify({'time': playerCurrentTime, 'message': message, 'videoName': video_name, 'totalTime':totaltime}));
-                messageInput.value = "";
+                messageInput.value = "";y
             };
             
             function getVideo(videoName) { 
                 location.href="/main?video=" + videoName; 
             };
-			
-
 			//moockt
 
             username = '{{username}}';
