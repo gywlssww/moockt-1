@@ -230,13 +230,26 @@ def message(request):
         return JsonResponse({
             'version': "2.0",
             'template': {
-                'outputs': [{
-                    'quickReplies': {
-                        'label':"적절한 응답을 찾지 못했습니다. 게시판에 등록하시겠습니까?",
-                        'action':'message',
-                        'messageText':"교수님께 직접 질문"
+                'outputs': [
+                    {
+                        "simpleText":{
+                            "text":"적절한 응답을 찾지 못했습니다. 게시판에 등록하시겠습니까?"
+                        }
                     }
-                }],
+                ],
+
+                "quickReplies": [
+                    {
+                        'label':"직접 질문",
+                        'action':'message',
+                        'messageText':"직접 질문"
+                    },
+                    {
+                        'label':"게시판에 등록",
+                        'action':'message',
+                        'messageText':"게시판에 등록"
+                    }
+                ]
             }
         })
     
