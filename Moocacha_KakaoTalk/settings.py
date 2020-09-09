@@ -25,7 +25,7 @@ SECRET_KEY = '&sjf%e4&kkj1r&&sj)!w1&e8m)-8u$77*y7bv*i#5(nx1^h#w#'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ['web']
 
 
 # Application definition
@@ -87,7 +87,7 @@ DATABASES = {
         'USER':'root',
         'PASSWORD':'321',
         'HOST':'localhost',
-        'PORT':'',
+        'PORT':'5432',
     }
 }
 # channel_layers
