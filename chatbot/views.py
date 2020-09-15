@@ -228,23 +228,23 @@ def message(request):
         })
     print("R: "+received)
     if received == "해당되는 내용이 없습니다.":
-        try:
-            with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
-                s.connect((address, PORT2))
-                s.sendall(requestMsg.encode("utf-8"))
-                received = str(s.recv(1024), "utf-8")
+        # try:
+        #     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+        #         s.connect((address, PORT2))
+        #         s.sendall(requestMsg.encode("utf-8"))
+        #         received = str(s.recv(1024), "utf-8")
         
-        except socket.error as e:
-            return JsonResponse({
-                'version': "2.0",
-                'template': {
-                    'outputs': [{
-                        'simpleText': {
-                            'text': "잘못된 입력 또는 챗봇이 꺼져있음"
-                        }
-                    }],
-                }
-            })
+        # except socket.error as e:
+        #     return JsonResponse({
+        #         'version': "2.0",
+        #         'template': {
+        #             'outputs': [{
+        #                 'simpleText': {
+        #                     'text': "잘못된 입력 또는 챗봇이 꺼져있음"
+        #                 }
+        #             }],
+        #         }
+        #     })
 
 
         return JsonResponse({
