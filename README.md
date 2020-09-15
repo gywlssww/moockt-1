@@ -2,6 +2,7 @@
 ###### 최종 수정일 : 2020-09-09
 
 ## 프로젝트 소개
+  * MOOC(Massive Open Online Course) + KakaoTalk 챗봇<br>동영상 제어(재생,정지,특정 시간으로 이동 등), 강의 내용에 대한 질의응답 서비스
 
 ## 개발환경
 
@@ -13,6 +14,7 @@
 
 <img src="./img/moockt-arch.png">
 
-## Author
+## 챗봇
 
-* [양재혁](https://github.com/yangjae33)
+  * Google Dialogflow
+  * AIML
