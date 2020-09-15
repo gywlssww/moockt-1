@@ -16,7 +16,8 @@ import json
 import os.path
 
 address = "114.70.21.89"
-PORT = 9005
+PORT1 = 9005 #AIML
+PORT2 = 9006 #Dialogflow
 PROJECT_ROOT = os.path.abspath(os.path.dirname(__file__))
 
 def keyboard(request):
@@ -207,10 +208,10 @@ def message(request):
                     })
 
     requestMsg = json.dumps(return_str) + "\n"
-    #print("recv data:"+requestMsg)
+
     try:
         with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
-            s.connect((address, PORT))
+            s.connect((address, PORT1))
             s.sendall(requestMsg.encode("utf-8"))
             received = str(s.recv(1024), "utf-8")
 
@@ -227,6 +228,25 @@ def message(request):
         })
     print("R: "+received)
     if received == "해당되는 내용이 없습니다.":
+        try:
+            with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+                s.connect((address, PORT2))
+                s.sendall(requestMsg.encode("utf-8"))
+                received = str(s.recv(1024), "utf-8")
+        
+        except socket.error as e:
+            return JsonResponse({
+                'version': "2.0",
+                'template': {
+                    'outputs': [{
+                        'simpleText': {
+                            'text': "잘못된 입력 또는 챗봇이 꺼져있음"
+                        }
+                    }],
+                }
+            })
+
+
         return JsonResponse({
             'version': "2.0",
             'template': {
