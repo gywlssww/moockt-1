@@ -105,13 +105,16 @@ class Alarm(TemplateView):
         print(self.request)
         #context['username'] = self.request.user.username
         context['username'] = self.request.session['user_id']
-        # context['shifted'] = self.request.data['shifted']
-        # context['op'] = self.request.data['op']
+
+        try:
+            context['shifted'] = self.request.data['shifted']
+            context['op'] = self.request.data['op']
+        except Exception:
+            print("error")
         return context
 
     def post(self, request, **kwargs):
         print("post")
-        ins=models.Test()
         data_unicode = request.body.decode('utf-8')
         data=json.loads(data_unicode)
         return HttpResponse('')
