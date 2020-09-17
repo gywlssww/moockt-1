@@ -102,11 +102,11 @@ class Alarm(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super(TemplateView, self).get_context_data()
-        
+        print(self.request)
         #context['username'] = self.request.user.username
         context['username'] = self.request.session['user_id']
-        context['shifted'] = self.request.data['shifted']
-        context['op'] = self.request.data['op']
+        # context['shifted'] = self.request.data['shifted']
+        # context['op'] = self.request.data['op']
         return context
 
     def post(self, request, **kwargs):
