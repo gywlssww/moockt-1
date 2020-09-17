@@ -171,7 +171,8 @@ def message(request):
             else:
                 if sft_time[-1] == '+' and sft_time[:-1].isdigit():
                     post_data = {'message': return_id,'shifted': sft_time[:-1],'op': 'plus'}
-                    response = requests.post('http://localhost:8000/signal', data=json.dumps(post_data))
+                    response = requests.post('http://localhost:8000/alarm', data=json.dumps(post_data))
+                    # response = requests.post('http://localhost:8000/signal', data=json.dumps(post_data))
                     return JsonResponse({
                         'version': "2.0",
                         'template': {

@@ -107,6 +107,15 @@ class Alarm(TemplateView):
         context['username'] = self.request.session['user_id']
         return context
 
+    def post(self, request, **kwargs):
+        print("post")
+        ins=models.Test()
+        data_unicode = request.body.decode('utf-8')
+        data=json.loads(data_unicode)
+        print(data)
+        return data
+
+
 class Reservation(TemplateView):
     template_name = "moocacha/test.html"
 
