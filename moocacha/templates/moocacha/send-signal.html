@@ -12,7 +12,7 @@
         var username='{{username}}';
         var shifted = '{{shifted}}';
         var op = '{{op}}';
-
+        console.log("core msg : "+sindow.location.href);
         xhr.open("POST", window.location.href, true);
         xhr.setRequestHeader('X-CSRFToken', '{{ csrf_token }}');
         xhr.setRequestHeader('Content-Type', 'application/json');
