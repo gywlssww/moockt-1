@@ -128,6 +128,7 @@ def testWS(request):
     channel_layer = get_channel_layer()
     data_unicode = request.body.decode('utf-8')
     data=json.loads(data_unicode)
+    print(data)
     async_to_sync(channel_layer.group_send)(
         'shares',
         {
