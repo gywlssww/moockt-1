@@ -138,7 +138,7 @@ class Sendsignal(TemplateView):
     def get_context_data(self, **kwargs):
         context = super(TemplateView, self).get_context_data()
         #context['username'] = self.request.user.username
-        
+        print("getcontext")
         try:
             lastrecord = Test.objects.filter(session_id=self.request.session['user_id']).last()
             
@@ -155,7 +155,7 @@ class Sendsignal(TemplateView):
         return context
 
     def post(self, request, **kwargs):
-        
+        print("post")
         ins=models.Test()
         data_unicode = request.body.decode('utf-8')
         data=json.loads(data_unicode)
