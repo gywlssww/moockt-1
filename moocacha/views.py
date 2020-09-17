@@ -120,9 +120,21 @@ class Alarm(TemplateView):
         print("post")
         data_unicode = request.body.decode('utf-8')
         data=json.loads(data_unicode)
-        
+        print(data)
+
         return HttpResponse('')
 
+def testWS(request):
+    channel_layer = get_channel_layer()
+
+    async_to_sync(channel_layer.group_send)(
+        'shares',{
+            'message': data['message'],
+            'shifted': data['shifted'],
+            'op': data['op']
+        }
+    )
+    return HttpResponse('<p>Done</p>')
 
 class Reservation(TemplateView):
     template_name = "moocacha/test.html"

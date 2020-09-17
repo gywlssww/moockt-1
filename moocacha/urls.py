@@ -31,6 +31,7 @@ urlpatterns = [
     path('foo',views.foo),
     path('signaltest',views.signaltest),
     path('logout',views.logout),
+    path('tests',views.testWS),
 ]
 
 #urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
