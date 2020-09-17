@@ -195,7 +195,7 @@
             console.log(username)
             var myChatSocket = new WebSocket(
                 'ws://'+window.location.host + 
-                '/ws/test/'+username+'/');
+                '/ws/ktalk/');
             console.log(username);
             myChatSocket.onmessage = function(e){
                 var data = JSON.parse(e.data);
