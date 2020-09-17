@@ -105,6 +105,8 @@ class Alarm(TemplateView):
         
         #context['username'] = self.request.user.username
         context['username'] = self.request.session['user_id']
+        context['shifted'] = self.request.data['shifted']
+        context['op'] = self.request.data['op']
         return context
 
     def post(self, request, **kwargs):
@@ -112,8 +114,7 @@ class Alarm(TemplateView):
         ins=models.Test()
         data_unicode = request.body.decode('utf-8')
         data=json.loads(data_unicode)
-        print(data)
-        return data
+        return HttpResponse('')
 
 
 class Reservation(TemplateView):
