@@ -130,6 +130,7 @@ def testWS(request):
     data=json.loads(data_unicode)
     async_to_sync(channel_layer.group_send)(
         'shares',{
+            'type':'shares.message',
             'message': data['message'],
             'shifted': data['shifted'],
             'op': data['op']
