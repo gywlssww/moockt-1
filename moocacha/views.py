@@ -152,19 +152,19 @@ class Sendsignal(TemplateView):
         context = super(TemplateView, self).get_context_data()
         #context['username'] = self.request.user.username
         print("getcontext")
-        try:
-            lastrecord = Test.objects.filter(session_id=self.request.session['user_id']).last()
+        # try:
+        #     lastrecord = Test.objects.filter(session_id=self.request.session['user_id']).last()
             
-        except Test.DoesNotExist:
-            content['username'] = ""
-            content['shifted'] = ""
-            content['op'] = ""
-            return context
+        # except Test.DoesNotExist:
+        #     content['username'] = ""
+        #     content['shifted'] = ""
+        #     content['op'] = ""
+        #     return context
         
-        lastrecord.delete()
-        context['username'] = lastrecord.session_id
-        context['shifted'] = lastrecord.shifted
-        context['op'] = lastrecord.op
+        # lastrecord.delete()
+        # context['username'] = lastrecord.session_id
+        # context['shifted'] = lastrecord.shifted
+        # context['op'] = lastrecord.op
         return context
 
     def post(self, request, **kwargs):
@@ -173,11 +173,11 @@ class Sendsignal(TemplateView):
         data_unicode = request.body.decode('utf-8')
         data=json.loads(data_unicode)
         print(data)
-        ins.message = data['message']
-        ins.op = data['op']
-        ins.shifted = data['shifted']
-        ins.session_id = data['message']
-        ins.save()
+        # ins.message = data['message']
+        # ins.op = data['op']
+        # ins.shifted = data['shifted']
+        # ins.session_id = data['message']
+        # ins.save()
         return HttpResponse('')
 
 def foo(request):
