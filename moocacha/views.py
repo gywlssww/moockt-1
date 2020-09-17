@@ -150,7 +150,7 @@ def signaltest(request):
     return render(request,"moocacha/send-signal.html",data)
 
 class Sendsignal(TemplateView):
-    template_name = "moocacha/send-signal.html"
+    template_name = "moocacha/main.html"
 
     def get_context_data(self, **kwargs):
         context = super(TemplateView, self).get_context_data()
