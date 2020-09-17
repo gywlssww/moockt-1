@@ -183,7 +183,7 @@
                 
                 document.getElementById("chatLog").value += ("Me : " + message + "\n");
                 chatSocket.send(JSON.stringify({'time': playerCurrentTime, 'message': message, 'videoName': video_name, 'totalTime':totaltime}));
-                messageInput.value = "";y
+                messageInput.value = "";
             };
             
             function getVideo(videoName) { 

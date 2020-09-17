@@ -13,8 +13,8 @@
         var shifted = '{{shifted}}';
         var op = '{{op}}';
         console.log("core msg : "+window.location.href);
-        xhr.open("POST", "http://114.70.21.89:8000/alarm", true);
-        //xhr.open("POST", window.location.href, true);
+        //xhr.open("POST", "http://114.70.21.89:8000/alarm", true);
+        xhr.open("POST", window.location.href, true);
         xhr.setRequestHeader('X-CSRFToken', '{{ csrf_token }}');
         xhr.setRequestHeader('Content-Type', 'application/json');
         xhr.send(JSON.stringify({

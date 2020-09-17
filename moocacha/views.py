@@ -6,6 +6,9 @@ from django.conf import settings
 
 from chatbot.models import ChatbotUser
 
+from channels.layers import get_channel_layer
+from asgiref.sync import async_to_sync
+
 import threading
 import datetime
 import json
@@ -117,6 +120,7 @@ class Alarm(TemplateView):
         print("post")
         data_unicode = request.body.decode('utf-8')
         data=json.loads(data_unicode)
+        
         return HttpResponse('')
 
 
@@ -173,6 +177,16 @@ class Sendsignal(TemplateView):
         data_unicode = request.body.decode('utf-8')
         data=json.loads(data_unicode)
         print(data)
+
+        channel_layer = get_channel_layer()
+        async_to_sync(channel_layer.group_send)(
+            'shares',{
+                'message': data['message'],
+                'shifted': data['shifted'],
+                'op': data['op']
+            }
+        )
+
         # ins.message = data['message']
         # ins.op = data['op']
         # ins.shifted = data['shifted']
